@@ -14,3 +14,28 @@ export const catchAsync =
             next(err);
         }
     };
+
+// throw err.status and err.message, default set to be 500 and "Internal Server Error"
+export const serverError = (
+    err: any,
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    if (!err.status) {
+        console.error(err.stack);
+    }
+    res.status(err.status || 500).json({
+        message: err.message || "Internal Server Error",
+    });
+};
+
+export const notFoundError = (
+    req: Request,
+    res: Response,
+    next: NextFunction
+) => {
+    res.status(404).json({
+        message: "Not Found",
+    });
+};

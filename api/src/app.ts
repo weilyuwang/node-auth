@@ -1,6 +1,7 @@
 import express, { NextFunction, Request, Response } from "express";
 import session, { Store } from "express-session"; // node.js session middleware
 import { SESSION_OPTIONS } from "./config";
+import { serverError, notFoundError } from "./middleware";
 import { register } from "./routes";
 
 // Declaration merging on express-session
@@ -26,14 +27,11 @@ export const createApp = (store: Store) => {
     // register routes
     app.use(register);
 
-    app.use((req, res, next) => {
-        res.status(404).json({ message: "Not Found" });
-    });
+    // use notFoundError middleware to handle any requests to unknown routes
+    app.use(notFoundError);
 
-    app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
-        console.error(err.stack);
-        res.status(500).json({ message: "Internal Server Error" });
-    });
+    // use serverError middleware to catch any error
+    app.use(serverError);
 
     return app;
 };

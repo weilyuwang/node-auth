@@ -1,22 +1,25 @@
 import { Router } from "express";
 import { logIn } from "../auth";
+import { BadRequest } from "../errors";
 import { guest, catchAsync } from "../middleware";
 import { User } from "../models";
-import { registerSchema } from "../validation";
+import { registerSchema, validate } from "../validation";
 const router = Router();
 
 router.post(
     "/register",
     guest,
     catchAsync(async (req, res) => {
-        await registerSchema.validateAsync(req.body, { abortEarly: false });
+        // validate the payload
+        await validate(registerSchema, req.body);
+
         const { email, name, password } = req.body;
 
         const found = await User.exists({ email });
 
         if (found) {
             // email already taken
-            throw new Error("Invalid email");
+            throw new BadRequest("Invalid email");
         }
 
         const user = await User.create({
