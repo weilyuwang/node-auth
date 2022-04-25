@@ -8,7 +8,7 @@ Under the application root directory, run
 npm run up
 ```
 
-### To start the application (in dev mode)
+### To run the application (in dev mode)
 
 Under the application root directory, run
 
