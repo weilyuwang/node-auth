@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { logIn } from "../auth";
 import { BadRequest } from "../errors";
 import { guest, catchAsync } from "../middleware";
@@ -9,7 +9,7 @@ const router = Router();
 router.post(
     "/register",
     guest,
-    catchAsync(async (req, res) => {
+    catchAsync(async (req: Request, res: Response) => {
         // validate the payload
         await validate(registerSchema, req.body);
 
