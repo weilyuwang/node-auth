@@ -3,6 +3,7 @@ import { SESSION_NAME } from "./config";
 
 export const logIn = (req: Request, userId: string) => {
     req.session.userId = userId;
+    req.session.createdAt = Date.now();
 };
 
 export const isLoggedIn = (req: Request) => !!req.session.userId;

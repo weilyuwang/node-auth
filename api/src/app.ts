@@ -1,15 +1,8 @@
 import express from "express";
 import session, { Store } from "express-session"; // node.js session middleware
 import { SESSION_OPTIONS } from "./config";
-import { serverError, notFoundError } from "./middleware";
+import { serverError, notFoundError, active, catchAsync } from "./middleware";
 import { home, login, register } from "./routes";
-
-// Declaration merging on express-session
-declare module "express-session" {
-    export interface SessionData {
-        userId: string | undefined;
-    }
-}
 
 export const createApp = (store: Store) => {
     const app = express();
@@ -23,6 +16,9 @@ export const createApp = (store: Store) => {
             store: store,
         })
     );
+
+    // session timeout middleware
+    app.use(catchAsync(active));
 
     // home route
     app.use(home);
