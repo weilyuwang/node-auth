@@ -27,6 +27,11 @@ userSchema.pre<UserDocument>("save", async function () {
     }
 });
 
+// set protected field (password, __v) and only send the rest of the user model fields
+userSchema.set("toJSON", {
+    transform: (_doc, { __v, password, ...rest }, _options) => rest,
+});
+
 userSchema.methods.matchesPassword = function (password: string) {
     return compare(password, this.password);
 };

@@ -2,7 +2,7 @@ import express from "express";
 import session, { Store } from "express-session"; // node.js session middleware
 import { SESSION_OPTIONS } from "./config";
 import { serverError, notFoundError } from "./middleware";
-import { login, register } from "./routes";
+import { home, login, register } from "./routes";
 
 // Declaration merging on express-session
 declare module "express-session" {
@@ -23,6 +23,9 @@ export const createApp = (store: Store) => {
             store: store,
         })
     );
+
+    // home route
+    app.use(home);
 
     // register route
     app.use(register);
