@@ -1,8 +1,8 @@
-import express, { NextFunction, Request, Response } from "express";
+import express from "express";
 import session, { Store } from "express-session"; // node.js session middleware
 import { SESSION_OPTIONS } from "./config";
 import { serverError, notFoundError } from "./middleware";
-import { register } from "./routes";
+import { login, register } from "./routes";
 
 // Declaration merging on express-session
 declare module "express-session" {
@@ -24,8 +24,11 @@ export const createApp = (store: Store) => {
         })
     );
 
-    // register routes
+    // register route
     app.use(register);
+
+    // login/logout route
+    app.use(login);
 
     // use notFoundError middleware to handle any requests to unknown routes
     app.use(notFoundError);
